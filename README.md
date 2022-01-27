@@ -1,6 +1,6 @@
 # Noughts and Crosses skill for Amazon Alexa
 
-This is the code for the Amazon Alexa Noughts and Crosses skill. It is a well known game, also known as Tic Tac Toe.
+This is the code for the Amazon Alexa Noughts and Crosses skill. It is a popular game, also known as Tic Tac Toe.
 
 This is a published skill which can be invoked on Amazon Echo or any Alexa capable device by saying "Alexa, open Noughts and Crosses skill"
 
