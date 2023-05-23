@@ -1,10 +1,9 @@
 """
-This is an Alexa lambda function implementation of the popular game Noughts and Crosses,
+This is an Alexa lambda function implementaion of the popular game Noughts and Crosses,
 otherwise known as Tic Tac Toe.
 
-It is a published skill which can be invoked on Amazon Echo or any Alexa capable device by saying "Alexa, open Noughts and Crosses skill"
-
-Copyright (C) 2017, 2021 Pawel Matusz. Distributed under the terms of the GNU GPL-3.0.
+Copyright: Infiniconcept, 2017
+Contact: info@infiniconcept.com
 
 Intent schema:
 {"intents": [
@@ -275,6 +274,17 @@ def on_launch(launch_request, session):
     initialise_attributes(attributes)
     return welcome_response(attributes)
 
+# if the skill gets into the wrong state, set a meaningful re-prompt
+def set_wrong_state_reprompt(state):
+    if state == STATE_SELECTING_DIFFICULTY:
+        msg = "Please select difficulty: easy, medium or hard. "
+    elif state == STATE_SELECTING_FIRST:
+        msg = "Who should go first, do you want to make the first move? Say yes or no. "
+    elif state == STATE_PLAYING:
+        msg = "What is your move? Say row followed by column, for example A1. "
+    else:
+        msg = "Try to say something else"
+    return msg
 
 def on_intent(intent_request, session):
     """ Called when the user specifies an intent for this skill """
@@ -327,6 +337,8 @@ def on_intent(intent_request, session):
                 attributes,
                 "")
         else:
+            if not attributes["lastRepeat"]:
+                attributes["lastRepeat"]=set_wrong_state_reprompt(attributes['state'])
             return handle_wrong_state(attributes);
 
     # "player move" intent with the main game logic
@@ -422,6 +434,8 @@ def on_intent(intent_request, session):
                 "What is your next move? \n\n" + \
                 drawBoard(attributes["board"]))
         else:
+            if not attributes["lastRepeat"]:
+                attributes["lastRepeat"]=set_wrong_state_reprompt(attributes['state'])
             return handle_wrong_state(attributes);
 
     # check square intent
@@ -461,6 +475,8 @@ def on_intent(intent_request, session):
                     drawBoard(attributes["board"]),
                     False)
         else:
+            if not attributes["lastRepeat"]:
+                attributes["lastRepeat"]=set_wrong_state_reprompt(attributes['state'])            
             return handle_wrong_state(attributes);
 
     # check board intent
@@ -475,6 +491,8 @@ def on_intent(intent_request, session):
                 drawBoard(attributes["board"]) + "\n\n" + attributes["lastRepeat"],
                 False)
         else:
+            if not attributes["lastRepeat"]:
+                attributes["lastRepeat"]=set_wrong_state_reprompt(attributes['state'])
             return handle_wrong_state(attributes);
 
     # "yes" intent
